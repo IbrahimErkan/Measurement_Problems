@@ -115,3 +115,18 @@ df[df["course_name"].index.isin([5, 1])]      # kurs isimlenrinden indexlere gö
 
 df[df["course_name"].index.isin([5, 1])].sort_values("bar_score", ascending=False)
 
+
+def hybrid_sorting_score(dataframe, bar_w=60, wss_w=40):
+    bar_score = dataframe.apply(lambda x: bayesian_average_rating(x[["1_point",
+                                                                     "2_point",
+                                                                     "3_point",
+                                                                     "4_point",
+                                                                     "5_point"]]), axis=1)
+    wss_score = weighted_sorting_score(dataframe)
+
+    return bar_score*bar_w/100 + wss_score*wss_w/100
+
+
+df["hybrid_sorting_score"] = hybrid_sorting_score(df)
+
+df.sort_values("hybrid_sorting_score", ascending=False).head(20)
