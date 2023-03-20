@@ -132,3 +132,33 @@ df["hybrid_sorting_score"] = hybrid_sorting_score(df)
 df.sort_values("hybrid_sorting_score", ascending=False).head(20)
 
 df[df["course_name"].str.contains("Veri Bilimi")].sort_values("hybrid_sorting_score", ascending=False).head(20)
+
+
+#############################
+# Uygulama: IMDB Movie Scoring & Sorting
+#############################
+
+import pandas as pd
+import math
+import scipy.stats as st
+pd.set_option('display.max_columns', None)
+pd.set_option('display.expand_frame_repr', False)
+pd.set_option('display.float_format', lambda x: '%.5f' % x)
+
+df = pd.read_csv("/content/gdrive/MyDrive/DSMLBC10/week_5 (27.10.22-02.11.22)/datasets/movies_metadata.csv", low_memory=False)  # DtypeWarning kapamak icin
+
+df = df[["title", "vote_average", "vote_count"]]
+
+print(df.shape)
+df.head()
+
+
+# Vote Average'a Göre Sıralama
+df.sort_values("vote_average", ascending=False).head()
+
+df["vote_count"].describe([0.10, 0.25, 0.50, 0.70, 0.80, 0.90, 0.95, 0.99]).T
+
+
+df[df["vote_count"] > 400].sort_values("vote_average", ascending=False).head(20)
+
+#tercih olarak 400 den büyük seçildi. Bu yemedi. vote_count 1-10 arasında scale edip değerlendirmek daha mantıklı olabilir.
