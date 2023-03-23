@@ -162,3 +162,17 @@ df["vote_count"].describe([0.10, 0.25, 0.50, 0.70, 0.80, 0.90, 0.95, 0.99]).T
 df[df["vote_count"] > 400].sort_values("vote_average", ascending=False).head(20)
 
 #tercih olarak 400 den büyük seçildi. Bu yemedi. vote_count 1-10 arasında scale edip değerlendirmek daha mantıklı olabilir.
+
+
+
+from sklearn.preprocessing import MinMaxScaler
+
+df["vote_count_score"] = MinMaxScaler(feature_range=(1, 10)). \
+    fit(df[["vote_count"]]). \
+    transform(df[["vote_count"]])
+
+
+# vote_average * vote_count (ikiside 1-10 arası değer)
+
+df["average_count_score"] = df["vote_average"] * df["vote_count_score"]
+df.sort_values("average_count_score", ascending=False).head(20)
